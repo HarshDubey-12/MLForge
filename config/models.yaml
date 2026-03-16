@@ -1,0 +1,5 @@
+# Model registry configuration.
+embedding_model: sentence-transformers/all-MiniLM-L6-v2
+generator_model: your-fine-tuned-model
+reranker_model: cross-encoder/ms-marco-MiniLM-L-6-v2
+

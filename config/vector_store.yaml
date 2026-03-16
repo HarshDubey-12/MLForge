@@ -1,0 +1,5 @@
+# Vector store backend and indexing parameters.
+backend: faiss
+metric: cosine
+top_k_default: 5
+

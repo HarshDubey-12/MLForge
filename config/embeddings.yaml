@@ -1,0 +1,5 @@
+# Embedding service configuration.
+provider: sentence_transformers
+batch_size: 32
+normalize_embeddings: true
+

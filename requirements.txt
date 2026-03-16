@@ -1,0 +1,31 @@
+# Core API
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+
+# Data processing
+pypdf
+beautifulsoup4
+nltk
+
+# ML / Retrieval
+sentence-transformers
+transformers
+peft
+bitsandbytes
+datasets
+faiss-cpu
+rank-bm25
+scikit-learn
+numpy
+torch
+
+# Database / Utilities
+sqlalchemy
+python-multipart
+pyyaml
+
+# Testing
+pytest
+

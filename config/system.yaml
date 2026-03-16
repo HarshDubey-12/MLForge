@@ -1,0 +1,5 @@
+# Application-wide system parameters.
+environment: development
+max_context_chunks: 8
+uncertainty_threshold: 0.4
+
