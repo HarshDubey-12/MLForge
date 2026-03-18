@@ -1,5 +1,10 @@
 """Dependency wiring for backend services."""
 
+from ml_research_assistant.data_pipeline.document_cleaner import DocumentCleaner
+from ml_research_assistant.data_pipeline.metadata_extractor import MetadataExtractor
+from ml_research_assistant.data_pipeline.pdf_parser import PDFParser
+from ml_research_assistant.data_pipeline.pipeline import DataIngestionPipeline
+from ml_research_assistant.data_pipeline.semantic_chunker import SemanticChunker
 from ml_research_assistant.embedding.service import EmbeddingService
 from ml_research_assistant.rag_engine.context_optimizer import ContextOptimizer
 from ml_research_assistant.rag_engine.generator import AnswerGenerator
@@ -12,6 +17,16 @@ from ml_research_assistant.retrieval.factory import RetrieverFactory
 from ml_research_assistant.retrieval.reranker import Reranker
 from ml_research_assistant.retrieval.semantic_retriever import SemanticRetriever
 from ml_research_assistant.vector_store.faiss_store import FAISSVectorStore
+
+
+def get_data_ingestion_pipeline() -> DataIngestionPipeline:
+    """Build the default document ingestion pipeline."""
+    return DataIngestionPipeline(
+        parser=PDFParser(),
+        cleaner=DocumentCleaner(),
+        chunker=SemanticChunker(),
+        metadata_extractor=MetadataExtractor(),
+    )
 
 
 def get_rag_pipeline() -> AdaptiveRAGPipeline:
@@ -30,4 +45,3 @@ def get_rag_pipeline() -> AdaptiveRAGPipeline:
         generator=AnswerGenerator(model_name="your-fine-tuned-model"),
         evaluator=SelfEvaluator(),
     )
-

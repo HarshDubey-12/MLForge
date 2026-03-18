@@ -17,8 +17,27 @@ class QueryResponse(BaseModel):
 
 
 class ConversationMessage(BaseModel):
-    """Simple message schema for `/conversation`."""
+    """Request payload for `/conversation`."""
 
     role: str
     content: str
 
+
+class ConversationResponse(BaseModel):
+    """Response payload for `/conversation`."""
+
+    reply: str
+
+
+class UploadDocumentResponse(BaseModel):
+    """Response payload for `/upload_documents`."""
+
+    filename: str
+    stored_filename: str
+    stored_path: str
+    content_type: str
+    size_bytes: int
+    status: str
+    ingestion_status: str
+    chunk_count: int
+    metadata: dict[str, str]
