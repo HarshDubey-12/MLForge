@@ -450,3 +450,13 @@ This means the frontend and the theory document can both be printed at any time.
 - Added backend-aware frontend behavior with local fallbacks
 - Added print-friendly frontend styling
 - Refactored the frontend into reusable components and shared data/config files
+- Upgraded backend routes into a route-plus-service structure
+- Replaced placeholder ingestion internals with real parsing, chunking, and metadata extraction
+- Added persistent document and chunk storage in SQLite
+- Added persistent FAISS storage and persistent BM25 corpus storage
+- Wired uploads into persistence and shared retrieval state
+- Added Hugging Face-backed baseline generation with safe fallback generation
+- Added fine-tuning dataset preparation, evaluation, and QLoRA training scaffolding
+- Promoted query responses to include evidence, plan summaries, and revision signals
+- Connected the frontend Evidence Explorer and conversation flow to backend evidence payloads
+- Added backend integration tests for rich query and conversation responses

@@ -35,6 +35,15 @@ export default function ConversationPanel({
             >
               <span className="message-role">{message.role}</span>
               <p>{message.content}</p>
+              {message.evidence?.length ? (
+                <div className="message-evidence-list">
+                  {message.evidence.map((item) => (
+                    <span className="message-evidence-pill" key={item.chunkId || item.title}>
+                      {item.title}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
             </article>
           ))}
         </div>

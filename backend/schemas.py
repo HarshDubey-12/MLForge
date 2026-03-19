@@ -3,6 +3,16 @@
 from pydantic import BaseModel
 
 
+class EvidenceItem(BaseModel):
+    """A retrieved evidence item surfaced to the client."""
+
+    chunk_id: str | None = None
+    title: str
+    excerpt: str
+    score: float
+    sources: list[str] = []
+
+
 class QueryRequest(BaseModel):
     """Request payload for `/query`."""
 
@@ -14,6 +24,9 @@ class QueryResponse(BaseModel):
 
     answer: str
     confidence: float
+    plan_summary: str
+    needs_revision: bool
+    evidence: list[EvidenceItem]
 
 
 class ConversationMessage(BaseModel):
@@ -27,6 +40,8 @@ class ConversationResponse(BaseModel):
     """Response payload for `/conversation`."""
 
     reply: str
+    confidence: float | None = None
+    evidence: list[EvidenceItem] = []
 
 
 class UploadDocumentResponse(BaseModel):

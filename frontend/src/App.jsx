@@ -74,6 +74,17 @@ export default function App() {
       setQueryResult({
         answer: data.answer || "No answer returned.",
         confidence: Number.isFinite(data.confidence) ? data.confidence : 0.5,
+        planSummary: data.plan_summary || "The backend did not return a plan summary.",
+        needsRevision: Boolean(data.needs_revision),
+        evidence: Array.isArray(data.evidence)
+          ? data.evidence.map((item) => ({
+              chunkId: item.chunk_id || null,
+              title: item.title || "Untitled source",
+              excerpt: item.excerpt || "",
+              score: Number.isFinite(item.score) ? item.score : 0,
+              sources: Array.isArray(item.sources) ? item.sources : [],
+            }))
+          : [],
       });
       setQueryStatus("Query completed using the backend route.");
     } catch (error) {
@@ -81,6 +92,9 @@ export default function App() {
         answer:
           "Backend query is not reachable right now, so this preview is showing a fallback summary of the intended experience.",
         confidence: 0.52,
+        planSummary: "Fallback mode is active because the backend query route is unavailable.",
+        needsRevision: true,
+        evidence: [],
       });
       setQueryStatus(error.message);
     } finally {
@@ -116,13 +130,13 @@ export default function App() {
       setDocuments((currentDocuments) => [
         {
           id: Date.now(),
-          title: data.filename || selectedFile.name,
-          meta: `${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB - ${selectedFile.type || "file"} - uploaded just now`,
-          status: "Accepted",
+          title: data.metadata?.title || data.filename || selectedFile.name,
+          meta: `${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB - ${selectedFile.type || "file"} - ${data.chunk_count || 0} chunks indexed`,
+          status: data.ingestion_status === "processed" ? "Indexed" : "Accepted",
         },
         ...currentDocuments,
       ]);
-      setUploadState("Document accepted by the backend.");
+      setUploadState(`Document accepted by the backend. ${data.chunk_count || 0} chunks processed.`);
       setSelectedFile(null);
     } catch (error) {
       setDocuments((currentDocuments) => [
@@ -183,6 +197,12 @@ export default function App() {
           content:
             data.reply ||
             "The backend conversation route responded without a message body.",
+          evidence: Array.isArray(data.evidence)
+            ? data.evidence.map((item) => ({
+                chunkId: item.chunk_id || null,
+                title: item.title || "Untitled source",
+              }))
+            : [],
         },
       ]);
     } catch (error) {
@@ -193,6 +213,7 @@ export default function App() {
           role: "assistant",
           content:
             "The live conversation service is not reachable, so this is a local fallback response that preserves the workflow.",
+          evidence: [],
         },
       ]);
     } finally {
@@ -229,8 +250,7 @@ export default function App() {
         />
 
         <EvidenceExplorer
-          answer={queryResult.answer}
-          documents={documents}
+          evidence={queryResult.evidence}
           question={question}
         />
 

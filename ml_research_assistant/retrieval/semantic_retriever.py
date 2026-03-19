@@ -16,7 +16,10 @@ class SemanticRetriever(RetrievalStrategy):
         """Search the vector repository with a query embedding."""
         query_embedding = self.embedding_service.embed_query(query)
         return [
-            {"text": record.text, "metadata": record.metadata}
+            {
+                "chunk_id": record.chunk_id,
+                "text": record.text,
+                "metadata": record.metadata,
+            }
             for record in self.repository.search(query_embedding, top_k=top_k)
         ]
-

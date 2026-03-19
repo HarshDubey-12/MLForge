@@ -48,6 +48,14 @@ export default function QueryWorkspace({
         <ConfidenceMeter value={queryResult.confidence} />
       </div>
 
+      <article className="plan-card">
+        <div className="section-label">Retrieval plan</div>
+        <p>{queryResult.planSummary}</p>
+        <span className={`revision-chip ${queryResult.needsRevision ? "revision-chip-warn" : ""}`}>
+          {queryResult.needsRevision ? "Needs revision" : "Grounding looks stable"}
+        </span>
+      </article>
+
       <article className="evidence-card">
         <div className="section-label">Why this module comes first</div>
         <ul>

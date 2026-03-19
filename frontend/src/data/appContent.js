@@ -14,8 +14,8 @@ export const moduleRoadmap = [
   {
     id: "evidence",
     name: "Evidence Explorer",
-    status: "UI prototype",
-    description: "Surface evidence cards and explain why the system answered the way it did.",
+    status: "Live evidence",
+    description: "Surface retrieved evidence cards and explain why the system answered the way it did.",
   },
   {
     id: "conversation",
@@ -40,6 +40,27 @@ export const initialQueryResult = {
   answer:
     "The strongest systems combine hybrid retrieval, adaptive query planning, and answer verification rather than relying on a single embedding lookup.",
   confidence: 0.84,
+  planSummary:
+    "Hybrid retrieval selected top 3 contexts to answer the current question.",
+  needsRevision: false,
+  evidence: [
+    {
+      chunkId: "seed-1",
+      title: "Adaptive RAG for Scientific Workflows.pdf",
+      excerpt:
+        "Hybrid retrieval improves recall in terminology-heavy literature, especially when dense and lexical signals are blended.",
+      score: 0.93,
+      sources: ["semantic", "keyword"],
+    },
+    {
+      chunkId: "seed-2",
+      title: "Evaluation Strategies for LLM Agents.pdf",
+      excerpt:
+        "Self-evaluation and answer verification help catch weak grounding before final response generation.",
+      score: 0.85,
+      sources: ["semantic"],
+    },
+  ],
 };
 
 export const sampleDocuments = [

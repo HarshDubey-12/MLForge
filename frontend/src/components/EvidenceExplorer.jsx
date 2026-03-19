@@ -1,26 +1,22 @@
-import { useMemo } from "react";
-
-export default function EvidenceExplorer({ question, answer, documents }) {
-  const evidenceCards = useMemo(() => {
-    const seedTerms = question
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .filter((term) => term.length > 4)
-      .slice(0, 3);
-
-    return documents.slice(0, 3).map((document, index) => ({
-      id: `${document.id}-${index}`,
-      title: document.title,
-      relevance: 0.93 - index * 0.08,
-      signal:
-        seedTerms[index] ||
-        ["retrieval", "evaluation", "knowledge"][index] ||
-        "research",
-      excerpt:
-        answer ||
-        "Evidence will appear here once the query and document systems are connected to live backend retrieval traces.",
-    }));
-  }, [answer, documents, question]);
+export default function EvidenceExplorer({ evidence, question }) {
+  const evidenceCards =
+    evidence && evidence.length
+      ? evidence.map((item, index) => ({
+          id: item.chunkId || `${item.title}-${index}`,
+          title: item.title,
+          relevance: item.score,
+          signal: item.sources?.length ? item.sources.join(" + ") : "retrieval",
+          excerpt: item.excerpt,
+        }))
+      : [
+          {
+            id: "empty-evidence",
+            title: "Waiting for indexed evidence",
+            relevance: 0.0,
+            signal: "pending",
+            excerpt: `Run a query after uploading documents to see live supporting evidence for: ${question}`,
+          },
+        ];
 
   return (
     <section className="module-stage" id="evidence">
