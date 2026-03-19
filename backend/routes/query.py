@@ -4,15 +4,24 @@ from fastapi import APIRouter, Depends
 
 from backend.dependencies import get_rag_pipeline
 from backend.schemas import QueryRequest, QueryResponse
+from backend.services.query_service import QueryService
+from ml_research_assistant.rag_engine.pipeline import AdaptiveRAGPipeline
 
 
 router = APIRouter(prefix="/query", tags=["query"])
 
 
-@router.post("", response_model=QueryResponse)
-def run_query(request: QueryRequest, pipeline=Depends(get_rag_pipeline)) -> QueryResponse:
-    """Execute the research assistant on a single user question."""
-    result = pipeline.run(request.question)
-    response = result["response"]
-    return QueryResponse(answer=str(response["answer"]), confidence=float(response["confidence"]))
+def get_query_service(
+    pipeline: AdaptiveRAGPipeline = Depends(get_rag_pipeline),
+) -> QueryService:
+    """Provide the query service instance."""
+    return QueryService(pipeline=pipeline)
 
+
+@router.post("", response_model=QueryResponse)
+def run_query(
+    request: QueryRequest,
+    service: QueryService = Depends(get_query_service),
+) -> QueryResponse:
+    """Execute the research assistant on a single user question."""
+    return service.run_query(request.question)

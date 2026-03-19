@@ -10,10 +10,22 @@ class EmbeddingService:
         self.model = EmbeddingModelFactory.create(model_name)
 
     def embed_documents(self, chunks: list[str]) -> list[list[float]]:
-        """Return placeholder document embeddings."""
-        return [[0.0] * 8 for _ in chunks]
+        """Return embeddings for a batch of document chunks."""
+        if not chunks:
+            return []
+
+        embeddings = self.model.encode(
+            chunks,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        )
+        return embeddings.tolist()
 
     def embed_query(self, query: str) -> list[float]:
-        """Return a placeholder query embedding."""
-        return [0.0] * 8
-
+        """Return an embedding for a single query string."""
+        embedding = self.model.encode(
+            query,
+            convert_to_numpy=True,
+            normalize_embeddings=True,
+        )
+        return embedding.tolist()
